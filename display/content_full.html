@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>redemption of sisyphus</title>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: monospace;
+        overflow-x: hidden;
+      }
+
+      .container {
+        min-height: 100vh;
+        width: 100%;
+        max-width: 100vw;
+        background-color: #111;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+        box-sizing: border-box;
+        overflow-x: hidden;
+      }
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        width: 100%;
+        max-width: clamp(300px, 100%, 700px);
+        box-sizing: border-box;
+      }
+
+      .description {
+        color: #bbb;
+        font-size: clamp(16px, 3vw, 18px);
+        line-height: 1.4;
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+      }
+
+      .model-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+        margin-top: 1rem;
+      }
+
+      .model-info-header {
+        color: #666;
+        font-size: clamp(12px, 2vw, 12px);
+      }
+
+      .model-info-values {
+        color: #888;
+        font-size: clamp(14px, 2.5vw, 16px);
+      }
+
+      .instructions-section {
+        margin-top: 2rem;
+        width: 100%;
+        max-width: 800px;
+      }
+
+      .instructions-view {
+        display: none;
+      }
+
+      .instructions-view .markdown-content {
+        display: block;
+        margin-top: 0;
+        padding: 0;
+        background: none;
+        border: none;
+        max-height: none;
+        overflow: visible;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
+      .instructions-button {
+        background: none;
+        border: none;
+        color: #888;
+        font-family: monospace;
+        font-size: 12px;
+        cursor: pointer;
+        text-decoration: underline;
+        text-decoration-color: transparent;
+        transition: all 0.3s ease;
+        padding: 0;
+      }
+
+      .instructions-button:hover {
+        color: #bbb;
+        text-decoration-color: #bbb;
+      }
+
+      .instructions-button:active {
+        color: #999;
+      }
+
+      .markdown-content {
+        display: none;
+        margin-top: 2rem;
+        padding: 2rem;
+        background-color: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 8px;
+        text-align: left;
+        color: #ccc;
+        font-size: 14px;
+        line-height: 1.6;
+        max-height: 60vh;
+        overflow-y: auto;
+      }
+
+      .markdown-content h1 {
+        color: #fff;
+        border-bottom: 2px solid #555;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .markdown-content h2 {
+        color: #eee;
+        margin-top: 1.5rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .markdown-content h3 {
+        color: #ddd;
+        margin-top: 1.2rem;
+        margin-bottom: 0.6rem;
+      }
+
+      .markdown-content p {
+        margin-bottom: 1rem;
+        word-wrap: break-word;
+      }
+
+      .markdown-content ul,
+      .markdown-content ol {
+        margin-bottom: 1rem;
+        padding-left: 2rem;
+      }
+
+      .markdown-content li {
+        margin-bottom: 0.5rem;
+      }
+
+      .markdown-content code {
+        background-color: #2a2a2a;
+        color: #f8f8f2;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-family: monospace;
+      }
+
+      .markdown-content pre code {
+        padding: 0;
+        background: none;
+        border-radius: 0;
+      }
+
+      .markdown-content pre {
+        background-color: #2a2a2a;
+        color: #f8f8f2;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        overflow-y: auto;
+        margin: 1rem 0;
+        width: 100%;
+        max-width: 100%;
+        max-height: 100px;
+        box-sizing: border-box;
+        font-size: 10px;
+      }
+
+      .markdown-content blockquote {
+        border-left: 4px solid #555;
+        margin: 1rem 0;
+        padding-left: 1rem;
+        color: #aaa;
+        font-style: italic;
+      }
+
+      /* Prevent overflow on all screen sizes */
+      @media (max-width: 1200px) {
+        .markdown-content pre {
+          white-space: pre-wrap;
+          word-break: break-all;
+          overflow-wrap: anywhere;
+        }
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .content {
+          gap: 1.5rem;
+        }
+
+        .description {
+          gap: 0.1rem;
+        }
+
+        .instructions-view .markdown-content {
+          font-size: 13px;
+        }
+
+        .instructions-section {
+          margin-top: 2rem;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 0.75rem;
+          overflow-x: hidden;
+        }
+
+        .content {
+          gap: 1.2rem;
+        }
+
+        .description {
+          font-size: clamp(14px, 4vw, 16px);
+        }
+
+        .model-info-values {
+          font-size: clamp(12px, 3vw, 14px);
+        }
+
+        .instructions-view .markdown-content {
+          font-size: 12px;
+        }
+
+        .markdown-content pre {
+          padding: 0.75rem;
+          font-size: 11px;
+          overflow-x: auto;
+        }
+
+        .markdown-content h1 {
+          font-size: 18px;
+        }
+
+        .markdown-content h2 {
+          font-size: 16px;
+        }
+
+        .markdown-content h3 {
+          font-size: 14px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 0.5rem;
+          min-height: 100vh;
+        }
+
+        .content {
+          gap: 1rem;
+        }
+
+        .description {
+          font-size: clamp(12px, 4vw, 14px);
+          line-height: 1.3;
+        }
+
+        .model-info-header {
+          font-size: clamp(9px, 2.5vw, 10px);
+        }
+
+        .model-info-values {
+          font-size: clamp(11px, 3vw, 12px);
+        }
+
+        .instructions-view .markdown-content {
+          font-size: 11px;
+          line-height: 1.4;
+        }
+
+        .markdown-content pre {
+          padding: 0.5rem;
+          font-size: 10px;
+          margin: 0.75rem 0;
+          white-space: pre-wrap;
+          word-break: break-all;
+        }
+
+        .markdown-content h1 {
+          font-size: 16px;
+          margin-bottom: 0.75rem;
+        }
+
+        .markdown-content h2 {
+          font-size: 14px;
+          margin-top: 1rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .markdown-content h3 {
+          font-size: 12px;
+          margin-top: 0.75rem;
+          margin-bottom: 0.4rem;
+        }
+
+        .markdown-content p {
+          margin-bottom: 0.75rem;
+        }
+
+        .instructions-button {
+          font-size: 10px;
+          padding: 0;
+        }
+
+        .instructions-section {
+          margin-top: 1rem;
+        }
+      }
+
+      @media (max-width: 380px) {
+        .container {
+          padding: 0.25rem;
+        }
+
+        .content {
+          gap: 0.75rem;
+        }
+
+        .description {
+          font-size: clamp(11px, 4vw, 13px);
+          gap: 0.1rem;
+        }
+
+        .model-info {
+          gap: 0.75rem;
+        }
+
+        .instructions-view .markdown-content {
+          font-size: 10px;
+        }
+
+        .markdown-content pre {
+          padding: 0.4rem;
+          font-size: 9px;
+          word-break: break-all;
+        }
+
+        .markdown-content h1 {
+          font-size: 14px;
+        }
+
+        .markdown-content h2 {
+          font-size: 12px;
+        }
+
+        .markdown-content h3 {
+          font-size: 11px;
+        }
+
+        .instructions-button {
+          font-size: 9px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="main-content" class="content">
+        <div class="description">
+          <div>a man stands on a misty mountain at dawn,</div>
+          <div>a stone rolling down the hill.</div>
+          <div>oil painting style, soft brushstrokes,</div>
+          <div>muted tones, romantic landscape.</div>
+        </div>
+
+        <div class="model-info">
+          <div class="model-info-header">model | seed range | steps | guidance</div>
+
+          <div class="model-info-values">stable-diffusion-v1-5 | 0-4294967296 | 25 | 7.5</div>
+        </div>
+
+        <div class="instructions-section">
+          <button class="instructions-button" onclick="toggleInstructions()">see detailed instructions</button>
+        </div>
+      </div>
+
+      <div id="instructions-content" class="content instructions-view">
+        <div class="instructions-section">
+          <button class="instructions-button" onclick="toggleInstructions()">hide detailed instructions</button>
+        </div>
+
+        <div class="markdown-content">
+          <h1>redemption of sisyphus</h1>
+
+          <p>reveal and claim the token by discovering the seed that generates the intended artwork.</p>
+
+          <h2>full instructions</h2>
+
+          <h3>step 1: setup environment</h3>
+
+          <p>install python 3.12 and the required packages:</p>
+
+          <pre><code>pip install torch>=2.0.0 diffusers>=0.26.3 transformers>=4.39.3 accelerate>=0.28.0 pillow>=10.0.0 pycryptodome>=3.23.0</code></pre>
+
+          <h3>step 2: run the generation script</h3>
+
+          <p>create a new python file and run this script:</p>
+
+          <pre><code id="python"></code></pre>
+
+          <p>this will generate images with random seeds in the given range until the correct image is found</p>
+
+          <h3>step 3: reveal the artwork and claim the token</h3>
+
+          <p>
+            now that you found the correct image, you can use the following unix command to get the image in binary format:
+          </p>
+
+          <pre><code>xxd -b replace_with_found_seed_32x32.png | cut -d' ' -f2-7 | tr -d ' \n'</code></pre>
+
+          <p>
+            you can copy and paste this output into a platform where you can interact with the smart contract such as
+            etherscan and claim the token via claimArtwork function.
+          </p>
+
+          <h3>hash list</h3>
+
+          <p>verification hashes for all components:</p>
+
+          <pre><code>Python-3.12.11.tgz:
+sha256: 7b8d59af8216044d2313de8120bfc2cc00a9bd2e542f15795e1d616c51faf3d6
+
+torch-2.7.1-cp312-cp312-manylinux_2_28_x86_64.whl:
+sha256: c33360cfc2edd976c2633b3b66c769bdcbbf0e0b6550606d188431c81e7dd1fc
+
+diffusers-0.34.0-py3-none-any.whl:
+sha256: b0f642cd57756357bad5d23fe95b61f2e6e30321c93f1302cca6d832a01e6d33
+
+transformers-4.54.0-py3-none-any.whl:
+sha256: c96e607f848625965b76c677b2c2576f2c7b7097c1c5292b281919d90675a25e
+
+accelerate-1.9.0-py3-none-any.whl:
+sha256: c24739a97ade1d54af4549a65f8b6b046adc87e2b3e4d6c66516e32c53d5a8f1
+
+pillow-11.3.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl:
+sha256: 676b2815362456b5b3216b4fd5bd89d362100dc6f4945154ff172e206a22c024
+
+stable-diffusion-v1-5/v1-5-pruned-emaonly.safetensors:
+sha256: 6ce0161689b3853acaa03779ec93eafe75a02f4ced659bee03f50797806fa2fa</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let isInstructionsVisible = false;
+
+      function toggleInstructions() {
+        const mainContent = document.getElementById("main-content");
+        const instructionsContent = document.getElementById("instructions-content");
+
+        if (!isInstructionsVisible) {
+          mainContent.style.display = "none";
+          instructionsContent.style.display = "flex";
+          isInstructionsVisible = true;
+        } else {
+          mainContent.style.display = "flex";
+          instructionsContent.style.display = "none";
+          isInstructionsVisible = false;
+        }
+      }
+
+      let pythonCode = `import torch
+from diffusers import StableDiffusionPipeline
+import random
+import json
+import os
+from Crypto.Hash import keccak
+from PIL import Image
+
+# Target hash to find
+TARGET_HASH = "d792017ba77e5e122a434c6166283484f00b6e8f247310425ea36ae22e1899af"
+
+# Function to generate an image with a specific seed
+def generate_image(prompt, seed, num_inference_steps=25, guidance_scale=7.5):
+    # Enforce deterministic behavior in PyTorch
+    torch.manual_seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
+    # Load the model
+    model_id = "sd-legacy/stable-diffusion-v1-5"
+    pipe = StableDiffusionPipeline.from_pretrained(
+        model_id,
+        safety_checker=None,
+        requires_safety_checker=False
+    )
+
+    # Move to CPU for cross-device consistency
+    pipe = pipe.to("cpu")
+
+    # Generate the image
+    image = pipe(
+        prompt=prompt,
+        num_inference_steps=num_inference_steps,
+        guidance_scale=guidance_scale,
+    ).images[0]
+
+    return image
+
+# Function to load seed cache from JSON file
+def load_seed_cache(cache_file="seed_cache.json"):
+    if os.path.exists(cache_file):
+        try:
+            with open(cache_file, 'r') as f:
+                return set(json.load(f))
+        except (FileNotFoundError, json.JSONDecodeError):
+            return set()
+    return set()
+
+# Function to save seed cache to JSON file
+def save_seed_cache(seed_cache, cache_file="seed_cache.json"):
+    with open(cache_file, 'w') as f:
+        json.dump(list(seed_cache), f, indent=2)
+
+# Function to calculate SHA256 of an image
+def calculate_image_sha256(image):
+    # Convert image to bytes
+    import io
+    img_byte_array = io.BytesIO()
+    image.save(img_byte_array, format='PNG')
+    img_bytes = img_byte_array.getvalue()
+
+    # Calculate keccak256 of the raw image bytes (like Solidity)
+    keccak256_hash = keccak.new(digest_bits=256)
+    keccak256_hash.update(img_bytes)
+    return keccak256_hash.hexdigest()
+
+
+# Create output directory if it doesn't exist
+os.makedirs("output", exist_ok=True)
+
+# Main loop
+prompt = "a man stands on a misty mountain at dawn, a stone rolling down the hill. oil painting style, soft brushstrokes, muted tones, romantic landscape."
+
+print("Starting seed search...")
+print(f"Target hash: {TARGET_HASH}")
+
+while True:
+    # Generate random seed between 0 and 2^32
+    seed = random.randint(0, 2**32 - 1)
+
+    # Load seed cache and check if seed is already used
+    seed_cache = load_seed_cache()
+    if seed in seed_cache:
+        continue  # Retry with a new seed
+
+    print(f"Testing seed: {seed} (Cache size: {len(seed_cache)})")
+
+    # Generate image with the seed
+    try:
+        image = generate_image(prompt, seed)
+
+        # Save the original image
+        original_path = f"output/{seed}.png"
+        image.save(original_path)
+
+        # Downscale the image to 32x32 with nearest neighbor
+        downscaled_image = image.resize((32, 32), resample=Image.NEAREST)
+
+        # Save the downscaled image
+        downscaled_path = f"output/{seed}_32x32.png"
+        downscaled_image.save(downscaled_path)
+
+        # Calculate SHA256 of the downscaled image
+        image_hash = calculate_image_sha256(downscaled_image)
+
+        print(f"  Generated hash: {image_hash}")
+
+        # Check if the hash matches the target
+        if image_hash == TARGET_HASH:
+            print(f"TARGET HASH FOUND!")
+            print(f"Matching seed: {seed}")
+            print(f"Original image: {original_path}")
+            print(f"Downscaled image: {downscaled_path}")
+            print(f"Hash: {image_hash}")
+            break  # Exit the loop
+        else:
+            # Save seed to cache and continue
+            seed_cache.add(seed)
+            save_seed_cache(seed_cache)
+            print(f"  No match, seed {seed} saved to cache")
+
+    except Exception as e:
+        print(f"Error with seed {seed}: {e}")
+        # Still save the seed to cache to avoid retrying it
+        seed_cache.add(seed)
+        save_seed_cache(seed_cache)
+
+print("Search completed!")`;
+
+      document.getElementById("python").textContent = pythonCode;
+    </script>
+  </body>
+</html>

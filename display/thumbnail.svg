@@ -1,0 +1,24 @@
+<svg width="600" height="600" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="600" height="600" fill="#111" />
+
+  <g transform="translate(300, 250)">
+    <!-- Prompt -->
+    <text x="0" y="0" text-anchor="middle" font-family="monospace" font-size="16" fill="#bbb">
+      <tspan x="0" dy="0">a man stands on a misty mountain at dawn,</tspan>
+      <tspan x="0" dy="25">a stone rolling down the hill.</tspan>
+      <tspan x="0" dy="25">oil painting style, soft brushstrokes,</tspan>
+      <tspan x="0" dy="25">muted tones, romantic landscape.</tspan>
+    </text>
+
+    <!-- Parameters header -->
+    <text x="0" y="120" text-anchor="middle" font-family="monospace" font-size="12" fill="#666">
+      model | seed range | steps | guidance
+    </text>
+
+    <!-- Parameters values -->
+    <text x="0" y="145" text-anchor="middle" font-family="monospace" font-size="14" fill="#888">
+      stable-diffusion-v1-5 | 0-4294967296 | 25 | 7.5
+    </text>
+  </g>
+</svg>
