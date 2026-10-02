@@ -23,6 +23,9 @@ cd image-generation
 pip install -r requirements.txt
 ```
 
+Or use the Docker image, which pins the exact Python, package wheels and model weights and includes a script to check
+your setup against a known seed. See [image-generation/README.md](image-generation/README.md).
+
 ### Step 2: Run the Generation Script
 
 Navigate to the image generation directory and run the script:

@@ -25,3 +25,4 @@ display/seed.txt
 venv
 image-generation/output/
 image-generation/seed_cache.json
+image-generation/work/*
